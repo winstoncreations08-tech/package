@@ -9,6 +9,4 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: BARE
-        value: "true"
     autoDeploy: true

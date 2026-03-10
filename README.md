@@ -1,8 +1,8 @@
 # Winston Unified
 
-Single-repo project that combines:
-- `WinstonWebsitething` frontend (React + TypeScript + Vite)
-- `BackShots` proxy backend (`/seal/`, `/wisp/`, asset proxy routes) served by Fastify
+Single-repo Winston website app:
+- React + TypeScript + Vite frontend
+- Fastify server for static hosting + SPA routes
 
 ## Local Development
 
@@ -26,13 +26,3 @@ This repository is configured for one Render web service via `render.yaml`.
 
 - Build: `npm install && npm run build`
 - Start: `npm start`
-
-## Proxy Endpoints
-
-- `/seal/`
-- `/wisp/`
-- `/assets/img/*`
-- `/assets-fb/*`
-- `/js/script.js`
-- `/return?q=...`
-- `/ds`

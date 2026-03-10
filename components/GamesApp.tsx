@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Home, Search, Gamepad2, ExternalLink, ArrowUpDown, Star } from 'lucide-react';
-import { openProxyWindow } from '../services/proxy';
 
 interface GamesAppProps {
   onBack: () => void;
@@ -78,7 +77,7 @@ const GamesApp: React.FC<GamesAppProps> = ({ onBack }) => {
   };
 
   const handleGameClick = (url: string) => {
-    openProxyWindow(url);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (loading) {

@@ -1,9 +1,15 @@
 import { TMDBResponse, Movie, GenresResponse, Genre, TVDetails, GenreFilter } from '../types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
+const FALLBACK_V3_API_KEY = '0dd07605b5de27e35ab3e0a14d5854db';
 
 // Helper to handle API requests safely
-const fetchFromTMDB = async <T,>(endpoint: string, apiKey: string, params: Record<string, string> = {}): Promise<T | null> => {
+const fetchFromTMDB = async <T,>(
+  endpoint: string,
+  apiKey: string,
+  params: Record<string, string> = {},
+  allowFallback = true
+): Promise<T | null> => {
   if (!apiKey) return null;
   
   // Sanitize the key: remove whitespace and 'Bearer ' prefix if present
@@ -33,6 +39,18 @@ const fetchFromTMDB = async <T,>(endpoint: string, apiKey: string, params: Recor
     const response = await fetch(url, { headers });
 
     if (!response.ok) {
+      if (response.status === 401 && allowFallback && cleanKey !== FALLBACK_V3_API_KEY) {
+        console.warn('TMDB key unauthorized, retrying with fallback key.');
+        try {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('redstream_tmdb_key', FALLBACK_V3_API_KEY);
+          }
+        } catch {
+          // Ignore storage errors.
+        }
+        return fetchFromTMDB<T>(endpoint, FALLBACK_V3_API_KEY, params, false);
+      }
+
       // Log specifically for 401 to help debugging
       if (response.status === 401) {
         console.error(`TMDB 401 Unauthorized. Key type: ${isV3Key ? 'v3' : 'v4'}. Length: ${cleanKey.length}`);

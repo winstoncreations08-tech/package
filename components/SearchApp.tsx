@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Home, Search, Loader2, X, ExternalLink, ArrowUpRight } from 'lucide-react';
-import { initProxyWorker, toProxyUrl } from '../services/proxy';
 
 interface SearchAppProps {
   onBack: () => void;
@@ -38,21 +37,20 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
     return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
   };
 
-  const runSearch = async (value?: string) => {
+  const runSearch = (value?: string) => {
     const source = value ?? query;
     const targetUrl = resolveTargetUrl(source);
     if (!targetUrl) return;
 
     setIsLoading(true);
     setQuery(source.trim());
-    await initProxyWorker();
-    setSearchUrl(toProxyUrl(targetUrl));
+    setSearchUrl(targetUrl);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      void runSearch();
+      runSearch();
     }
   };
 
@@ -60,6 +58,11 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
     setQuery('');
     setSearchUrl('');
     setIsLoading(false);
+  };
+
+  const openSearchInTab = () => {
+    if (!searchUrl) return;
+    window.open(searchUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -80,15 +83,14 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
         </button>
 
         {searchUrl && (
-          <a
-            href={searchUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={openSearchInTab}
             className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/70 px-4 py-2 text-xs md:text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
           >
             Open in tab
             <ExternalLink className="h-4 w-4" />
-          </a>
+          </button>
         )}
       </div>
 
@@ -131,7 +133,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
                 </button>
               )}
               <button
-                onClick={() => void runSearch()}
+                onClick={() => runSearch()}
                 className="rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 text-sm font-semibold transition"
               >
                 Go
@@ -143,7 +145,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
             {QUICK_LINKS.map((link) => (
               <button
                 key={link}
-                onClick={() => void runSearch(link)}
+                onClick={() => runSearch(link)}
                 className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-xs md:text-sm text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800 transition"
               >
                 {link}
@@ -167,7 +169,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
               className="w-full h-full border-0 bg-white"
               title="Search Results"
               onLoad={() => setIsLoading(false)}
-              sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+              sandbox="allow-forms allow-scripts allow-same-origin"
             />
           </section>
         ) : (

@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Home, Search, LayoutGrid, ExternalLink, ArrowUpDown } from 'lucide-react';
-import { openProxyWindow } from '../services/proxy';
 
 interface AppsAppProps {
   onBack: () => void;
@@ -66,7 +65,7 @@ const AppsApp: React.FC<AppsAppProps> = ({ onBack }) => {
   };
 
   const handleAppClick = (url: string) => {
-    openProxyWindow(url);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (loading) {

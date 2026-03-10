@@ -4,7 +4,6 @@ import SearchApp from './components/SearchApp';
 import GamesApp from './components/GamesApp';
 import AppsApp from './components/AppsApp';
 import { Globe, Tv, Gamepad2, LayoutGrid, ArrowRight } from 'lucide-react';
-import { initProxyWorker } from './services/proxy';
 
 type AppMode = 'launcher' | 'streams' | 'searches' | 'games' | 'apps';
 type LaunchMode = Exclude<AppMode, 'launcher'>;
@@ -33,22 +32,6 @@ const App: React.FC = () => {
     const handlePopState = () => setAppMode(modeFromPath(window.location.pathname));
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  useEffect(() => {
-    void initProxyWorker();
-  }, []);
-
-  useEffect(() => {
-    if (!window.location.pathname.startsWith('/uv/service/')) return;
-
-    const guardKey = `uv-bootstrap:${window.location.pathname}`;
-    if (sessionStorage.getItem(guardKey) === '1') return;
-    sessionStorage.setItem(guardKey, '1');
-
-    initProxyWorker().finally(() => {
-      window.location.replace(window.location.href);
-    });
   }, []);
 
   const handleLaunch = (target: LaunchMode) => {

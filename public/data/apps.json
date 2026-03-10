@@ -17,7 +17,7 @@
     {
       "appName": "99 Balls 3D",
       "desc": "Ball/Platformer apps",
-      "icon": "/assets/img/99balls3d.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/99balls3d.webp",
       "url": "https://gamesnacks.com/games/99balls3d",
       "disabled": false
     },
@@ -87,7 +87,7 @@
     {
       "appName": "Aquapark.io",
       "desc": "Water Slide Racing",
-      "icon": "/assets/img/aquapark.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/aquapark.webp",
       "url": "https://classroom6x.gitlab.io/aquaparkio/",
       "disabled": false
     },
@@ -115,14 +115,14 @@
     {
       "appName": "Awesome Tanks 2",
       "desc": "Fun Action",
-      "icon": "/assets/img/atanks2.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/atanks2.webp",
       "url": "https://derpman.codeberg.page/awesometanks2/",
       "disabled": false
     },
     {
       "appName": "Bacon May Die",
       "desc": "Domination-type fun",
-      "icon": "/assets/img/baconmaydie.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/baconmaydie.webp",
       "url": "https://game.enjoy4fun.com/baconmaydie/v2/index.html",
       "disabled": false
     },
@@ -143,7 +143,7 @@
     {
       "appName": "Basket Random",
       "desc": "Ragdoll Basketball",
-      "icon": "/assets/img/basketrandom.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/basketrandom.webp",
       "url": "https://files.twoplayergames.org/files/games/other/Basket_Random/index.html",
       "disabled": false
     },
@@ -157,14 +157,14 @@
     {
       "appName": "Basketball Stars",
       "desc": "Basketball",
-      "icon": "/assets/img/basketballstars.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/basketballstars.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars",
       "disabled": false
     },
     {
       "appName": "BasketBros.io",
       "desc": "Sport apps",
-      "icon": "/assets/img/basketbros.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/basketbros.webp",
       "url": "https://basketbros.io",
       "disabled": false
     },
@@ -234,7 +234,7 @@
     {
       "appName": "Boxel Rebound",
       "desc": "Ball/Platformer apps",
-      "icon": "/assets/img/boxelrebound.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/boxelrebound.webp",
       "url": "https://trinculo54.github.io/Boxel-rebound-hope/Newer/index.html",
       "disabled": false
     },
@@ -248,7 +248,7 @@
     {
       "appName": "BuildNow.GG",
       "desc": "Build & Shoot",
-      "icon": "/assets/img/buildnow.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/buildnow.webp",
       "url": "https://games.crazygames.com/en_US/buildnow-gg/index.html",
       "disabled": false
     },
@@ -262,7 +262,7 @@
     {
       "appName": "Candy Jump",
       "desc": "Idle/Clicking apps",
-      "icon": "/assets/img/candyjump.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/candyjump.webp",
       "url": "https://candyjump.games235.com/",
       "disabled": false
     },
@@ -276,7 +276,7 @@
     {
       "appName": "Chess.com",
       "desc": "Online Chess",
-      "icon": "/assets/img/chess.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/chess.webp",
       "url": "https://chess.com",
       "disabled": false
     },
@@ -297,14 +297,14 @@
     {
       "appName": "Cluster Rush",
       "desc": "Parkour Racing",
-      "icon": "/assets/img/clustertruck.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/clustertruck.webp",
       "url": "https://www.snake-games.io/localgames/cluster-rush/",
       "disabled": false
     },
     {
       "appName": "Cluster Truck",
       "desc": "Running apps",
-      "icon": "/assets/img/clustertruck.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/clustertruck.webp",
       "url": "https://www.snake-games.io/localgames/cluster-rush/",
       "disabled": false
     },
@@ -339,14 +339,14 @@
     {
       "appName": "Crowd Run 3D",
       "desc": "Running apps",
-      "icon": "/assets/img/crowd-run-3d.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/crowd-run-3d.webp",
       "url": "https://games.cdn.famobi.com/html5games/c/crowd-run-3d/v040/",
       "disabled": false
     },
     {
       "appName": "Cubeform",
       "desc": "Ball/Platformer apps",
-      "icon": "/assets/img/cubeform.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/cubeform.webp",
       "url": "https://www.mathplayground.com/cubeform/index.html",
       "disabled": false
     },
@@ -423,14 +423,14 @@
     {
       "appName": "Double Wires",
       "desc": "Ball/Platformer apps",
-      "icon": "/assets-fb/doublewires/doublewires.png",
+      "icon": "https://dogeub-assets.ftp.sh/doublewires/doublewires.png",
       "url": "https://www.gamenora.com/upload/games/swf/Double%20Wires/",
       "disabled": false
     },
     {
       "appName": "Draw the Hill",
       "desc": "Car/Racing apps",
-      "icon": "/assets/img/drawthehill.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/drawthehill.webp",
       "url": "https://www.mathplayground.com/draw-the-hill/index.html",
       "disabled": false
     },
@@ -444,14 +444,14 @@
     {
       "appName": "Drive Mad",
       "desc": "Obstacle Racing",
-      "icon": "/assets/img/drive-mad.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/drive-mad.webp",
       "url": "https://drivemad.me/iframe/index.html",
       "disabled": false
     },
     {
       "appName": "Eggy Car",
       "desc": "Balance Driving",
-      "icon": "/assets/img/eggycar.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/eggycar.webp",
       "url": "https://webglmath.github.io/eggy-car/",
       "disabled": false
     },
@@ -472,7 +472,7 @@
     {
       "appName": "Fireboy and Watergirl",
       "desc": "Co-op Puzzle",
-      "icon": "/assets/img/fireboy-and-watergirl.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/fireboy-and-watergirl.webp",
       "url": "https://ubg100.github.io/games/fbwg1/index.html",
       "disabled": false
     },
@@ -514,7 +514,7 @@
     {
       "appName": "Florr.io",
       "desc": "Fun Action",
-      "icon": "/assets/img/florr.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/florr.webp",
       "url": "https://florr.io",
       "disabled": false
     },
@@ -528,28 +528,28 @@
     {
       "appName": "Funny Shooter 2",
       "desc": "Fun Action",
-      "icon": "/assets/img/funnyshooter2.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/funnyshooter2.webp",
       "url": "https://htmlxm.github.io/h4/funny-shooter-2",
       "disabled": false
     },
     {
       "appName": "GeForce Now",
       "desc": "All-Time favorites",
-      "icon": "/assets/img/geforcenow.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/geforcenow.webp",
       "url": "https://play.geforcenow.com",
       "disabled": false
     },
     {
       "appName": "Genshin Impact",
       "desc": "Domination-type fun",
-      "icon": "/assets/img/genshin.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/genshin.webp",
       "url": "https://www.easyfun.gg/cloud-games/genshin-impact.html",
       "disabled": false
     },
     {
       "appName": "Geometry Dash Lite",
       "desc": "Rhythm Platformer",
-      "icon": "/assets/img/geometrydash.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/geometrydash.webp",
       "url": "https://geometrydash-lite.io/",
       "disabled": false
     },
@@ -584,14 +584,14 @@
     {
       "appName": "HexGL",
       "desc": "Car/Racing apps",
-      "icon": "/assets/img/hexgl.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/hexgl.webp",
       "url": "https://hexgl.bkcore.com/play/",
       "disabled": false
     },
     {
       "appName": "Hole.io",
       "desc": "Eating Game",
-      "icon": "/assets/img/hole-io.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/hole-io.webp",
       "url": "https://hole-io.com",
       "disabled": false
     },
@@ -612,7 +612,7 @@
     {
       "appName": "Idle Breakout",
       "desc": "Idle Clicker",
-      "icon": "/assets/img/idlebreakout.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/idlebreakout.webp",
       "url": "https://www.onlinegames.io/games/2024/more/idle-breakout/index.html",
       "disabled": false
     },
@@ -633,14 +633,14 @@
     {
       "appName": "Jstris",
       "desc": "Brain apps",
-      "icon": "/assets/img/jstris.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/jstris.webp",
       "url": "https://jstris.jezevec10.com",
       "disabled": false
     },
     {
       "appName": "Kick The Buddy",
       "desc": "Sandbox/Arcade apps",
-      "icon": "/assets/img/super-buddy-kick.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/super-buddy-kick.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/09399bfcb6e8462b873a6154b506ea99/index.html?gdpr-targeting=1&gd_sdk_referrer_url=https%3A%2F%2Fwww.silvergames.com%2Fen%2Fsuper-buddy-kick&gd_zone_config=eyJwYXJlbnRVUkwiOiJodHRwczovL3d3dy5zaWx2ZXJnYW1lcy5jb20vZW4vc3VwZXItYnVkZHkta2ljayIsInBhcmVudERvbWFpbiI6InNpbHZlcmdhbWVzLmNvbSIsInRvcERvbWFpbiI6InNpbHZlcmdhbWVzLmNvbSIsImhhc0ltcHJlc3Npb24iOmZhbHNlLCJsb2FkZXJFbmFibGVkIjp0cnVlLCJob3N0IjoiaHRtbDUuZ2FtZWRpc3RyaWJ1dGlvbi5jb20iLCJ2ZXJzaW9uIjoiMS41LjE3In0%253D",
       "disabled": false
     },
@@ -668,7 +668,7 @@
     {
       "appName": "Krunker.io",
       "desc": "FPS",
-      "icon": "/assets/img/krunker.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/krunker.webp",
       "url": "https://krunker.io",
       "disabled": false
     },
@@ -689,7 +689,7 @@
     {
       "appName": "Little Alchemy",
       "desc": "Crafting Game",
-      "icon": "/assets/img/littlealchemy.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/littlealchemy.webp",
       "url": "https://littlealchemy.com",
       "disabled": false
     },
@@ -724,7 +724,7 @@
     {
       "appName": "Minecraft (Java Edition)",
       "desc": "Sandbox/Arcade apps",
-      "icon": "/assets/img/minecraft.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/minecraft.webp",
       "url": "https://mcraft.fun",
       "disabled": false
     },
@@ -745,7 +745,7 @@
     {
       "appName": "Monkey Mart",
       "desc": "Store Management",
-      "icon": "/assets/img/monkeymart.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/monkeymart.webp",
       "url": "https://raw.githack.com/Skoolgq/Polaris-Assets/main/monkey-mart/index.html",
       "disabled": false
     },
@@ -759,7 +759,7 @@
     {
       "appName": "Moto X3M",
       "desc": "Bike Racing",
-      "icon": "/assets/img/motox3m.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/motox3m.webp",
       "url": "https://www.coolmathgames.com/0-moto-x3m/play",
       "disabled": false
     },
@@ -787,7 +787,7 @@
     {
       "appName": "Neal.fun",
       "desc": "All-Time favorites",
-      "icon": "/assets/img/nf.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/nf.webp",
       "url": "https://neal.fun",
       "disabled": false
     },
@@ -808,7 +808,7 @@
     {
       "appName": "OvO",
       "desc": "Parkour Platformer",
-      "icon": "/assets/img/ovo.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/ovo.webp",
       "url": "https://ovo.onrender.com/versions/1.4.4b/index.html",
       "disabled": false
     },
@@ -822,7 +822,7 @@
     {
       "appName": "OvO Dimensions",
       "desc": "Running apps",
-      "icon": "/assets/img/ovodimensions.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/ovodimensions.webp",
       "url": "https://www.miniplay.com/embed/ovo-dimensions",
       "disabled": false
     },
@@ -843,7 +843,7 @@
     {
       "appName": "Paper.io",
       "desc": "Territory Game",
-      "icon": "/assets/img/paperio.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/paperio.webp",
       "url": "https://paper-io.com",
       "disabled": false
     },
@@ -871,7 +871,7 @@
     {
       "appName": "Pokemon 2048",
       "desc": "Brain apps",
-      "icon": "/assets/img/p2048.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/p2048.webp",
       "url": "https://filipekiss.github.io/2048",
       "disabled": false
     },
@@ -927,7 +927,7 @@
     {
       "appName": "Roblox",
       "desc": "All-Time favorites",
-      "icon": "/assets/img/roblox.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/roblox.webp",
       "url": "https://www.easyfun.gg/cloud-games/roblox.html",
       "disabled": false
     },
@@ -941,7 +941,7 @@
     {
       "appName": "Rocket Bot Royale",
       "desc": "Fun Action",
-      "icon": "/assets/img/rocketbotroyale.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/rocketbotroyale.webp",
       "url": "https://rocketbotroyale.winterpixel.io/",
       "disabled": false
     },
@@ -955,7 +955,7 @@
     {
       "appName": "Run 3",
       "desc": "Ball Platformer",
-      "icon": "/assets/img/run3.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/run3.webp",
       "url": "https://bonbang.github.io/store99/run-3",
       "disabled": false
     },
@@ -1011,7 +1011,7 @@
     {
       "appName": "Stack Bounce",
       "desc": "Ball/Platformer apps",
-      "icon": "/assets/img/stackbounce.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/stackbounce.webp",
       "url": "https://gamesnacks.com/games/stackbounce",
       "disabled": false
     },
@@ -1025,7 +1025,7 @@
     {
       "appName": "Stickman Hook",
       "desc": "Swing Game",
-      "icon": "/assets/img/stickmanhook.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/stickmanhook.webp",
       "url": "https://stickman-hook.io/iframe/index.html",
       "disabled": false
     },
@@ -1053,7 +1053,7 @@
     {
       "appName": "Tall Man Run",
       "desc": "Running apps",
-      "icon": "/assets/img/tall-man-run.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/tall-man-run.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/7980c23fbbae4af6851e01052fce3cce/index.html",
       "disabled": false
     },
@@ -1067,14 +1067,14 @@
     {
       "appName": "Temple Run",
       "desc": "Running apps",
-      "icon": "/assets/img/temple-run.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/temple-run.webp",
       "url": "https://burgerbounty.github.io/s8/temple-run-2/",
       "disabled": false
     },
     {
       "appName": "Territorial.io",
       "desc": "Strategy",
-      "icon": "/assets/img/territorial.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/territorial.webp",
       "url": "https://territorial.io",
       "disabled": false
     },
@@ -1123,21 +1123,21 @@
     {
       "appName": "There is No Game",
       "desc": "Sandbox/Arcade apps",
-      "icon": "/assets/img/there-is-no-gms.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/there-is-no-gms.webp",
       "url": "https://23azostore.github.io/s/there-is-no-game/",
       "disabled": false
     },
     {
       "appName": "Time Shooter 3",
       "desc": "Time Control FPS",
-      "icon": "/assets/img/time-shooter-3.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/time-shooter-3.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/6493b872f0564380a7adad671d1e0a57/index.html",
       "disabled": false
     },
     {
       "appName": "Time Shooter SWAT",
       "desc": "Fun Action",
-      "icon": "/assets/img/time-shooter-3.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/time-shooter-3.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/6493b872f0564380a7adad671d1e0a57/index.html",
       "disabled": false
     },
@@ -1214,21 +1214,21 @@
     {
       "appName": "Vex 8",
       "desc": "Running apps",
-      "icon": "/assets/img/vex8.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/vex8.webp",
       "url": "https://html5.gamedistribution.com/rvvASMiM/949009d40a2846f89f887de2285d6c28/index.html",
       "disabled": false
     },
     {
       "appName": "Volley Random",
       "desc": "Sport apps",
-      "icon": "/assets/img/volley-random.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/volley-random.webp",
       "url": "https://files.twoplayergames.org/files/games/o1/Volley_random/index.html",
       "disabled": false
     },
     {
       "appName": "Watermelon Game (Suika)",
       "desc": "Brain apps",
-      "icon": "/assets/img/suika.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/suika.webp",
       "url": "https://watermelongame.com",
       "disabled": false
     },
@@ -1256,7 +1256,7 @@
     {
       "appName": "World's Hardest GM",
       "desc": "Brain apps",
-      "icon": "/assets/img/worldshardestgm.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/worldshardestgm.webp",
       "url": "https://raw.githack.com/Skoolgq/Polaris-Assets/main/worlds-hardest-game/index.html",
       "disabled": false
     },
@@ -1300,7 +1300,7 @@
     {
       "appName": "Bing",
       "desc": "Search Engine",
-      "icon": "/assets/img/bing.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/bing.webp",
       "url": "https://bing.com",
       "disabled": false
     },
@@ -1328,14 +1328,14 @@
     {
       "appName": "CoolMathapps",
       "desc": "Fun logic and math games at Coolmath Games!",
-      "icon": "/assets/img/cmg.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/cmg.webp",
       "url": "https://coolmathgames.com",
       "disabled": false
     },
     {
       "appName": "CoolMathGames",
       "desc": "Educational Games",
-      "icon": "/assets/img/cmg.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/cmg.webp",
       "url": "https://coolmathgames.com",
       "disabled": false
     },
@@ -1419,21 +1419,21 @@
     {
       "appName": "FMHY.net",
       "desc": "Free Resources",
-      "icon": "/assets/img/fmhy.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/fmhy.webp",
       "url": "https://fmhy.net",
       "disabled": false
     },
     {
       "appName": "GeForce NOW",
       "desc": "Cloud Gaming",
-      "icon": "/assets/img/geforcenow.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/geforcenow.webp",
       "url": "https://play.geforcenow.com",
       "disabled": false
     },
     {
       "appName": "Genshin Impact",
       "desc": "Cloud Gaming",
-      "icon": "/assets/img/genshin.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/genshin.webp",
       "url": "https://www.easyfun.gg/cloud-games/genshin-impact.html",
       "disabled": false
     },
@@ -1454,7 +1454,7 @@
     {
       "appName": "Google",
       "desc": "Search Engine",
-      "icon": "/assets/img/goog.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/goog.webp",
       "url": "https://google.com",
       "disabled": false
     },
@@ -1552,14 +1552,14 @@
     {
       "appName": "Minecraft (Java)",
       "desc": "Cloud Minecraft",
-      "icon": "/assets/img/minecraft.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/minecraft.webp",
       "url": "https://mcraft.fun",
       "disabled": false
     },
     {
       "appName": "Neal.fun",
       "desc": "Interactive Experiments",
-      "icon": "/assets/img/nf.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/nf.webp",
       "url": "https://neal.fun",
       "disabled": false
     },
@@ -1608,7 +1608,7 @@
     {
       "appName": "Pinterest",
       "desc": "Visual Discovery",
-      "icon": "/assets/img/pin.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/pin.webp",
       "url": "https://pinterest.com",
       "disabled": false
     },
@@ -1636,7 +1636,7 @@
     {
       "appName": "Roblox Cloud",
       "desc": "Cloud Gaming",
-      "icon": "/assets/img/roblox.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/roblox.webp",
       "url": "https://www.easyfun.gg/cloud-games/roblox.html",
       "disabled": false
     },
@@ -1678,7 +1678,7 @@
     {
       "appName": "Symbolab",
       "desc": "Math Solver",
-      "icon": "/assets/img/symb.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/symb.webp",
       "url": "https://symbolab.com",
       "disabled": false
     },
@@ -1762,7 +1762,7 @@
     {
       "appName": "X (Twitter)",
       "desc": "Real-time news and social conversations.",
-      "icon": "/assets/img/twitter-x.webp",
+      "icon": "https://dogeub-assets.pages.dev/img/twitter-x.webp",
       "url": "https://x.com/i/flow/login",
       "disabled": false
     },
