@@ -4,6 +4,9 @@ import SearchApp from './components/SearchApp';
 import GamesApp from './components/GamesApp';
 import AppsApp from './components/AppsApp';
 import { Globe, Tv, Gamepad2, LayoutGrid, ArrowRight } from 'lucide-react';
+import TopBar from './components/TopBar';
+import { loadPrefs, savePrefs, type WinstonPrefs } from './utils/prefs';
+import { setDocumentTitle, setFavicon, openAboutBlankCloaked } from './utils/cloak';
 
 type AppMode = 'launcher' | 'streams' | 'searches' | 'games' | 'apps';
 type LaunchMode = Exclude<AppMode, 'launcher'>;
@@ -27,12 +30,33 @@ const pathForMode = (mode: AppMode): string => {
 const App: React.FC = () => {
   const [appMode, setAppMode] = useState<AppMode>(() => modeFromPath(window.location.pathname));
   const [hoveredCard, setHoveredCard] = useState<LaunchMode | null>(null);
+  const [prefs, setPrefs] = useState<WinstonPrefs>(() => loadPrefs());
+  const [baseTitle] = useState(() => (typeof document !== 'undefined' ? document.title : 'Winston'));
+  const [baseFaviconHref] = useState(() => {
+    if (typeof document === 'undefined') return '';
+    return document.querySelector<HTMLLinkElement>('link[rel="icon"]')?.href || '';
+  });
 
   useEffect(() => {
     const handlePopState = () => setAppMode(modeFromPath(window.location.pathname));
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  useEffect(() => {
+    savePrefs(prefs);
+  }, [prefs]);
+
+  useEffect(() => {
+    if (!prefs.cloakMode) {
+      setDocumentTitle(baseTitle);
+      if (baseFaviconHref) setFavicon(baseFaviconHref);
+      return;
+    }
+
+    setDocumentTitle(prefs.cloakTitle || baseTitle);
+    if (prefs.cloakFaviconUrl) setFavicon(prefs.cloakFaviconUrl);
+  }, [prefs.cloakMode, prefs.cloakTitle, prefs.cloakFaviconUrl, baseTitle, baseFaviconHref]);
 
   const handleLaunch = (target: LaunchMode) => {
     setAppMode(target);
@@ -42,6 +66,18 @@ const App: React.FC = () => {
   const handleBackToLauncher = () => {
     setAppMode('launcher');
     window.history.pushState({}, '', pathForMode('launcher'));
+  };
+
+  const openUrl = (rawUrl: string) => {
+    const url = rawUrl.trim();
+    if (!url) return;
+
+    if (prefs.cloakMode && prefs.cloakAboutBlank) {
+      openAboutBlankCloaked(url, prefs.cloakTitle || baseTitle, prefs.cloakFaviconUrl || baseFaviconHref);
+      return;
+    }
+
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const orbColors = useMemo(() => {
@@ -97,10 +133,12 @@ const App: React.FC = () => {
   return (
     <div className="h-[100dvh] bg-zinc-950 text-white relative font-sans selection:bg-white/20 overflow-hidden flex flex-col">
       <div className="relative z-10 w-full flex-1 flex flex-col overflow-hidden">
-        {appMode === 'streams' && <MovieApp onBack={handleBackToLauncher} />}
-        {appMode === 'searches' && <SearchApp onBack={handleBackToLauncher} />}
-        {appMode === 'games' && <GamesApp onBack={handleBackToLauncher} />}
-        {appMode === 'apps' && <AppsApp onBack={handleBackToLauncher} />}
+        {appMode !== 'launcher' && <TopBar onBackToLauncher={handleBackToLauncher} prefs={prefs} onChangePrefs={setPrefs} />}
+
+        {appMode === 'streams' && <MovieApp />}
+        {appMode === 'searches' && <SearchApp onOpenUrl={openUrl} />}
+        {appMode === 'games' && <GamesApp onOpenUrl={openUrl} />}
+        {appMode === 'apps' && <AppsApp onOpenUrl={openUrl} />}
 
         {appMode === 'launcher' && (
           <div className="flex-1 w-full h-full overflow-y-auto no-scrollbar scroll-smooth">
@@ -170,6 +208,7 @@ const App: React.FC = () => {
           </div>
         )}
       </div>
+
     </div>
   );
 };

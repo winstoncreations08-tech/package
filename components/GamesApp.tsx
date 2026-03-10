@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Home, Search, Gamepad2, ExternalLink, ArrowUpDown, Star } from 'lucide-react';
+import { Search, Gamepad2, ExternalLink, ArrowUpDown, Star } from 'lucide-react';
 
 interface GamesAppProps {
-  onBack: () => void;
+  onOpenUrl: (url: string) => void;
 }
 
 interface Game {
@@ -21,7 +21,7 @@ const FEATURED_GAME: Game = {
   url: 'https://cheesestorecedarhurst.com',
 };
 
-const GamesApp: React.FC<GamesAppProps> = ({ onBack }) => {
+const GamesApp: React.FC<GamesAppProps> = ({ onOpenUrl }) => {
   const [games, setGames] = useState<Game[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortMode>('alphabetical');
@@ -77,7 +77,7 @@ const GamesApp: React.FC<GamesAppProps> = ({ onBack }) => {
   };
 
   const handleGameClick = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    onOpenUrl(url);
   };
 
   if (loading) {
@@ -96,16 +96,6 @@ const GamesApp: React.FC<GamesAppProps> = ({ onBack }) => {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-purple-500/10 blur-[120px]" />
         <div className="absolute -bottom-24 -right-24 h-[420px] w-[420px] rounded-full bg-pink-500/10 blur-[120px]" />
-      </div>
-
-      <div className="relative z-20 fixed top-0 left-0 right-0 p-4 md:p-6 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 to-transparent">
-        <button
-          onClick={onBack}
-          className="group pointer-events-auto rounded-full bg-zinc-900/70 p-2.5 md:p-3 hover:bg-zinc-800 transition backdrop-blur-md flex items-center gap-2 pr-4 border border-zinc-800"
-        >
-          <Home className="h-5 w-5 text-zinc-400 group-hover:text-white transition" />
-          <span className="text-sm font-medium text-zinc-400 group-hover:text-white transition hidden sm:inline">Launcher</span>
-        </button>
       </div>
 
       <div className="relative z-10 w-full max-w-[1380px] mx-auto px-4 md:px-8 pb-10 pt-24 md:pt-28 space-y-6">

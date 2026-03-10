@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Home, Search, Loader2, X, ExternalLink, ArrowUpRight } from 'lucide-react';
+import { Search, Loader2, X, ExternalLink, ArrowUpRight } from 'lucide-react';
 
 interface SearchAppProps {
-  onBack: () => void;
+  onOpenUrl: (url: string) => void;
 }
 
 const QUICK_LINKS = [
@@ -16,7 +16,7 @@ const QUICK_LINKS = [
   'wikipedia.org',
 ];
 
-const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
+const SearchApp: React.FC<SearchAppProps> = ({ onOpenUrl }) => {
   const [query, setQuery] = useState('');
   const [searchUrl, setSearchUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +62,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
 
   const openSearchInTab = () => {
     if (!searchUrl) return;
-    window.open(searchUrl, '_blank', 'noopener,noreferrer');
+    onOpenUrl(searchUrl);
   };
 
   return (
@@ -70,28 +70,6 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-24 -left-20 h-[420px] w-[420px] rounded-full bg-blue-500/10 blur-[110px]" />
         <div className="absolute -bottom-24 -right-20 h-[420px] w-[420px] rounded-full bg-cyan-500/10 blur-[110px]" />
-      </div>
-
-      <div className="relative z-20 fixed top-0 left-0 right-0 p-4 md:p-6 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 to-transparent">
-        <button
-          onClick={onBack}
-          aria-label="Back to Launcher"
-          className="group pointer-events-auto rounded-full bg-zinc-900/70 p-2.5 md:p-3 hover:bg-zinc-800 transition backdrop-blur-md flex items-center gap-2 pr-4 border border-zinc-800"
-        >
-          <Home className="h-5 w-5 text-zinc-400 group-hover:text-white transition" />
-          <span className="text-sm font-medium text-zinc-400 group-hover:text-white transition hidden sm:inline">Launcher</span>
-        </button>
-
-        {searchUrl && (
-          <button
-            type="button"
-            onClick={openSearchInTab}
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/70 px-4 py-2 text-xs md:text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
-          >
-            Open in tab
-            <ExternalLink className="h-4 w-4" />
-          </button>
-        )}
       </div>
 
       <div className="relative z-10 w-full max-w-[1380px] mx-auto px-4 md:px-8 pb-8 pt-24 md:pt-28 flex-1 flex flex-col gap-6">
@@ -153,6 +131,19 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
               </button>
             ))}
           </div>
+
+          {searchUrl && (
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={openSearchInTab}
+                className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/70 px-4 py-2 text-xs md:text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
+              >
+                Open in tab
+                <ExternalLink className="h-4 w-4" />
+              </button>
+            </div>
+          )}
         </section>
 
         {searchUrl ? (
@@ -169,7 +160,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onBack }) => {
               className="w-full h-full border-0 bg-white"
               title="Search Results"
               onLoad={() => setIsLoading(false)}
-              sandbox="allow-forms allow-scripts allow-same-origin"
+              sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
             />
           </section>
         ) : (

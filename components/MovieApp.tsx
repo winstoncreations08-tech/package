@@ -4,13 +4,12 @@ import Player from './Player';
 import SettingsModal from './SettingsModal';
 import { Movie, Settings, MediaType, SortOption, Genre, GenreFilter } from '../types';
 import { discoverByProvider, discoverMedia, getGenres, getTrendingMedia, searchMovies } from '../services/tmdb';
-import { Loader2, Settings as SettingsIcon, Search, ChevronDown, Home, Play } from 'lucide-react';
+import { Loader2, Settings as SettingsIcon, Search, ChevronDown, Play } from 'lucide-react';
 
 const TMDB_STORAGE_KEY = 'redstream_tmdb_key';
 const DEFAULT_API_KEY = '0dd07605b5de27e35ab3e0a14d5854db';
 
 interface MovieAppProps {
-  onBack: () => void;
 }
 
 interface ProviderConfig {
@@ -46,7 +45,7 @@ const getHeroImage = (movie: Movie | null) => {
   return '';
 };
 
-const MovieApp: React.FC<MovieAppProps> = ({ onBack }) => {
+const MovieApp: React.FC<MovieAppProps> = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -290,28 +289,24 @@ const MovieApp: React.FC<MovieAppProps> = ({ onBack }) => {
 
   return (
     <div className="min-h-screen w-full bg-black text-white overflow-y-auto overflow-x-hidden selection:bg-red-600 selection:text-white animate-in fade-in duration-500">
-      <div className="fixed top-0 left-0 right-0 p-4 md:p-6 z-50 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 to-transparent">
-        <button
-          onClick={onBack}
-          className="group pointer-events-auto relative rounded-full bg-zinc-900/50 p-2 md:p-3 hover:bg-zinc-800 transition backdrop-blur-md flex items-center gap-2 pr-4 border border-white/10"
-        >
-          <Home className="h-4 w-4 md:h-5 md:w-5 text-zinc-400 group-hover:text-white transition" />
-          <span className="text-xs md:text-sm font-medium text-zinc-400 group-hover:text-white transition hidden sm:inline">Launcher</span>
-        </button>
-        <button
-          onClick={() => setShowSettings(true)}
-          className="group pointer-events-auto relative rounded-full bg-zinc-900/50 p-2 md:p-3 hover:bg-zinc-800 transition backdrop-blur-md border border-white/10"
-        >
-          <SettingsIcon className="h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-hover:text-white transition-transform group-hover:rotate-90" />
-        </button>
-      </div>
-
       <div className="w-full max-w-[1380px] mx-auto px-4 md:px-8 pb-16 pt-24 md:pt-28 space-y-8">
         <section className="rounded-2xl border border-zinc-800/80 bg-zinc-950/60 backdrop-blur-sm p-4 md:p-6">
           <div className="flex flex-col gap-4">
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-red-500 via-red-400 to-zinc-200">WinstonStreams</h1>
-              <p className="text-zinc-500 text-sm md:text-base mt-1">Your all-in-one streaming dashboard.</p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-red-500 via-red-400 to-zinc-200">
+                  WinstonStreams
+                </h1>
+                <p className="text-zinc-500 text-sm md:text-base mt-1">Your all-in-one streaming dashboard.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSettings(true)}
+                className="rounded-full border border-white/10 bg-zinc-900/60 hover:bg-zinc-800 transition backdrop-blur-md p-2.5 md:p-3 text-zinc-300 hover:text-white"
+                aria-label="Open settings"
+              >
+                <SettingsIcon className="h-5 w-5 md:h-6 md:w-6" />
+              </button>
             </div>
 
             <div className="relative w-full">
