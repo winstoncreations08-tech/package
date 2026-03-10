@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Home, VenetianMask, Settings2 } from 'lucide-react';
+import { Home, VenetianMask, Settings2, ShieldAlert } from 'lucide-react';
 import type { WinstonPrefs } from '../utils/prefs';
 
 type TopBarProps = {
@@ -42,11 +42,11 @@ const Toggle: React.FC<{
 
 const ICON_PRESETS: Array<{ label: string; url: string }> = [
   { label: 'Google', url: 'https://www.google.com/favicon.ico' },
-  { label: 'Classroom', url: 'https://classroom.google.com/favicon.ico' },
-  { label: 'Drive', url: 'https://drive.google.com/favicon.ico' },
-  { label: 'Docs', url: 'https://docs.google.com/favicon.ico' },
-  { label: 'Gmail', url: 'https://mail.google.com/favicon.ico' },
-  { label: 'Canvas', url: 'https://canvas.instructure.com/favicon.ico' },
+  { label: 'Classroom', url: 'https://www.google.com/s2/favicons?sz=64&domain=classroom.google.com' },
+  { label: 'Docs', url: 'https://www.google.com/s2/favicons?sz=64&domain=docs.google.com' },
+  { label: 'Schoology', url: 'https://www.google.com/s2/favicons?sz=64&domain=schoology.com' },
+  { label: 'Canvas', url: 'https://www.google.com/s2/favicons?sz=64&domain=instructure.com' },
+  { label: 'AP', url: 'https://www.google.com/s2/favicons?sz=64&domain=myap.collegeboard.org' },
 ];
 
 const TopBar: React.FC<TopBarProps> = ({ onBackToLauncher, prefs, onChangePrefs, rightSlot }) => {
@@ -67,6 +67,14 @@ const TopBar: React.FC<TopBarProps> = ({ onBackToLauncher, prefs, onChangePrefs,
     if (!prefs.cloakMode) return 'Off';
     return prefs.cloakAboutBlank ? 'On • about:blank' : 'On';
   }, [prefs.cloakMode, prefs.cloakAboutBlank]);
+
+  const showUblockMessage = useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    const ua = navigator.userAgent.toLowerCase();
+    const isMobile = /android|iphone|ipad|ipod/.test(ua);
+    const isChromeOS = /cros/.test(ua);
+    return !isMobile && !isChromeOS;
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] p-4 md:p-6 pointer-events-none bg-gradient-to-b from-black/90 to-transparent">
@@ -159,6 +167,18 @@ const TopBar: React.FC<TopBarProps> = ({ onBackToLauncher, prefs, onChangePrefs,
                       })}
                     </div>
                   </div>
+
+                  {showUblockMessage && (
+                    <div className="mt-4 rounded-xl border border-blue-500/20 bg-blue-500/10 p-3 flex gap-3 items-start">
+                      <ShieldAlert className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
+                      <div className="space-y-1">
+                        <p className="text-xs font-semibold text-blue-300">Pro Tip for PC Users</p>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed">
+                          Tired of invisible ad overlays on movies? Install the <a href="https://ublockorigin.com/" target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">uBlock Origin</a> extension to block them instantly.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

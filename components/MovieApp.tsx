@@ -17,6 +17,7 @@ interface ProviderConfig {
   name: string;
   providerId: number;
   accentClass: string;
+  iconUrl?: string;
 }
 
 interface ProviderRail extends ProviderConfig {
@@ -24,12 +25,12 @@ interface ProviderRail extends ProviderConfig {
 }
 
 const STREAMING_PROVIDER_CONFIG: ProviderConfig[] = [
-  { key: 'netflix', name: 'Popular on Netflix', providerId: 8, accentClass: 'from-red-600/30' },
-  { key: 'hulu', name: 'Popular on Hulu', providerId: 15, accentClass: 'from-green-500/30' },
-  { key: 'disney', name: 'Popular on Disney+', providerId: 337, accentClass: 'from-blue-500/30' },
-  { key: 'apple', name: 'Popular on Apple TV+', providerId: 350, accentClass: 'from-zinc-400/30' },
-  { key: 'prime', name: 'Popular on Prime Video', providerId: 9, accentClass: 'from-cyan-500/30' },
-  { key: 'max', name: 'Popular on Max', providerId: 1899, accentClass: 'from-purple-500/30' },
+  { key: 'netflix', name: 'Netflix', providerId: 8, accentClass: 'from-red-600/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=netflix.com' },
+  { key: 'hulu', name: 'Hulu', providerId: 15, accentClass: 'from-green-500/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=hulu.com' },
+  { key: 'disney', name: 'Disney+', providerId: 337, accentClass: 'from-blue-500/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=disneyplus.com' },
+  { key: 'apple', name: 'Apple TV+', providerId: 350, accentClass: 'from-zinc-400/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=apple.com' },
+  { key: 'prime', name: 'Prime Video', providerId: 9, accentClass: 'from-cyan-500/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=amazon.com' },
+  { key: 'max', name: 'Max', providerId: 1899, accentClass: 'from-purple-500/30', iconUrl: 'https://www.google.com/s2/favicons?sz=128&domain=max.com' },
 ];
 
 const getTitle = (movie: Movie) => movie.title || movie.name || 'Untitled';
@@ -61,7 +62,8 @@ const MovieApp: React.FC<MovieAppProps> = () => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [providerRails, setProviderRails] = useState<ProviderRail[]>([]);
-  const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
+  const [featuredMovies, setFeaturedMovies] = useState<Array<{ movie: Movie; provider: ProviderConfig | null }>>([]);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
   const [providerLoading, setProviderLoading] = useState(false);
   const [settings, setSettings] = useState<Settings>(() => ({
     tmdbApiKey: localStorage.getItem(TMDB_STORAGE_KEY) || DEFAULT_API_KEY,
@@ -88,9 +90,7 @@ const MovieApp: React.FC<MovieAppProps> = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (!selectedMovie) {
-      document.title = 'WinstonStreams';
-    }
+    // Player handles its own title when open
   }, [debouncedSearch, selectedMovie]);
 
   const observer = useRef<IntersectionObserver | null>(null);
@@ -213,7 +213,7 @@ const MovieApp: React.FC<MovieAppProps> = () => {
   useEffect(() => {
     if (!settings.tmdbApiKey || isSearching) {
       setProviderRails([]);
-      setFeaturedMovie(null);
+      setFeaturedMovies([]);
       setProviderLoading(false);
       return;
     }
@@ -223,15 +223,36 @@ const MovieApp: React.FC<MovieAppProps> = () => {
     const loadStreamingRows = async () => {
       setProviderLoading(true);
       try {
+        let genreFilter: GenreFilter | null = null;
+        if (selectedGenreVal) {
+          if (mediaType === 'all' && typeof selectedGenreVal === 'string') {
+            const mapping = genreMap[selectedGenreVal];
+            if (mapping) genreFilter = mapping;
+          } else if (typeof selectedGenreVal === 'number') {
+            genreFilter = selectedGenreVal;
+          }
+        }
+
         const [trending, ...providerResults] = await Promise.all([
-          getTrendingMedia('all', settings.tmdbApiKey, 'week'),
-          ...STREAMING_PROVIDER_CONFIG.map((provider) => discoverByProvider('all', provider.providerId, settings.tmdbApiKey, 1)),
+          getTrendingMedia(mediaType, settings.tmdbApiKey, 'week'),
+          ...STREAMING_PROVIDER_CONFIG.map((provider) => 
+            discoverByProvider(mediaType, provider.providerId, sortBy, genreFilter, settings.tmdbApiKey, 1)
+          ),
         ]);
 
         if (cancelled) return;
 
-        const firstHero = trending.find((m) => !!m.backdrop_path) || trending[0] || null;
-        setFeaturedMovie(firstHero);
+        const heroes: Array<{ movie: Movie; provider: ProviderConfig | null }> = [];
+        const topTrending = trending.find((m) => !!m.backdrop_path);
+        if (topTrending) heroes.push({ movie: topTrending, provider: null });
+
+        STREAMING_PROVIDER_CONFIG.forEach((provider, index) => {
+          const top = providerResults[index]?.find((m) => !!m.backdrop_path);
+          if (top) heroes.push({ movie: top, provider });
+        });
+
+        setFeaturedMovies(heroes);
+        setFeaturedIndex(0);
 
         const rows: ProviderRail[] = STREAMING_PROVIDER_CONFIG.map((provider, index) => {
           const deduped = (providerResults[index] || []).filter((item, i, arr) => {
@@ -250,7 +271,7 @@ const MovieApp: React.FC<MovieAppProps> = () => {
         if (!cancelled) {
           console.error('Failed to load streaming rows:', error);
           setProviderRails([]);
-          setFeaturedMovie(null);
+          setFeaturedMovies([]);
         }
       } finally {
         if (!cancelled) setProviderLoading(false);
@@ -262,7 +283,15 @@ const MovieApp: React.FC<MovieAppProps> = () => {
     return () => {
       cancelled = true;
     };
-  }, [settings.tmdbApiKey, isSearching]);
+  }, [settings.tmdbApiKey, isSearching, mediaType, sortBy, selectedGenreVal, genreMap]);
+
+  useEffect(() => {
+    if (featuredMovies.length <= 1) return;
+    const interval = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % featuredMovies.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [featuredMovies.length]);
 
   const handleMovieClick = (movie: Movie) => setSelectedMovie(movie);
   const handleClosePlayer = () => setSelectedMovie(null);
@@ -324,44 +353,86 @@ const MovieApp: React.FC<MovieAppProps> = () => {
           </div>
         </section>
 
-        {!isSearching && featuredMovie && (
+        {!isSearching && featuredMovies.length > 0 && (
           <section className="relative overflow-hidden rounded-2xl border border-zinc-800 min-h-[340px] md:min-h-[420px]">
-            {getHeroImage(featuredMovie) && (
-              <img
-                src={getHeroImage(featuredMovie)}
-                alt={getTitle(featuredMovie)}
-                className="absolute inset-0 h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/30" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+            {featuredMovies.map((hero, idx) => (
+              <div
+                key={`${hero.movie.id}-${idx}`}
+                className={`absolute inset-0 transition-opacity duration-1000 ${
+                  idx === featuredIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                {getHeroImage(hero.movie) && (
+                  <img
+                    src={getHeroImage(hero.movie)}
+                    alt={getTitle(hero.movie)}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
 
-            <div className="relative z-10 h-full p-6 md:p-10 flex items-end">
-              <div className="max-w-2xl space-y-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-red-300">Featured This Week</p>
-                <h2 className="text-3xl md:text-5xl font-black leading-tight text-white">{getTitle(featuredMovie)}</h2>
-                <p className="text-zinc-300 text-sm md:text-base line-clamp-3">{featuredMovie.overview || 'Top trending right now.'}</p>
-                <div className="flex items-center gap-3 text-xs md:text-sm text-zinc-400">
-                  <span>{getYear(featuredMovie) || 'Now Streaming'}</span>
-                  <span>•</span>
-                  <span>{featuredMovie.media_type === 'tv' ? 'TV Series' : 'Movie'}</span>
-                  {featuredMovie.vote_average > 0 && (
-                    <>
+                <div className="relative z-10 h-full p-6 md:p-10 flex flex-col justify-end">
+                  <div className="max-w-2xl space-y-4">
+                    {hero.provider ? (
+                      <div className="flex items-center gap-2">
+                        {hero.provider.iconUrl && (
+                          <img
+                            src={hero.provider.iconUrl}
+                            alt={hero.provider.name}
+                            className="h-6 w-6 rounded-md object-contain bg-white/10"
+                            onError={(e) => (e.currentTarget.style.display = 'none')}
+                          />
+                        )}
+                        <p className="text-xs uppercase tracking-[0.2em] font-semibold text-zinc-300">
+                          {getBrowseLabel()} on {hero.provider.name}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-xs uppercase tracking-[0.2em] font-semibold text-zinc-300">
+                        Top {getBrowseLabel()}
+                      </p>
+                    )}
+                    <h2 className="text-3xl md:text-5xl font-black leading-tight text-white">{getTitle(hero.movie)}</h2>
+                    <p className="text-zinc-300 text-sm md:text-base line-clamp-3">
+                      {hero.movie.overview || 'Top trending right now.'}
+                    </p>
+                    <div className="flex items-center gap-3 text-xs md:text-sm text-zinc-400">
+                      <span>{getYear(hero.movie) || 'Now Streaming'}</span>
                       <span>•</span>
-                      <span>{featuredMovie.vote_average.toFixed(1)} Rating</span>
-                    </>
-                  )}
+                      <span>{hero.movie.media_type === 'tv' ? 'TV Series' : 'Movie'}</span>
+                      {hero.movie.vote_average > 0 && (
+                        <>
+                          <span>•</span>
+                          <span>{hero.movie.vote_average.toFixed(1)} Rating</span>
+                        </>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => handleMovieClick(hero.movie)}
+                      className="inline-flex items-center gap-2 rounded-full bg-white text-black px-5 py-2.5 font-semibold hover:bg-zinc-200 transition mt-2"
+                    >
+                      <Play className="h-4 w-4 fill-black" />
+                      Watch Now
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={() => handleMovieClick(featuredMovie)}
-                  className="inline-flex items-center gap-2 rounded-full bg-white text-black px-5 py-2.5 font-semibold hover:bg-zinc-200 transition"
-                >
-                  <Play className="h-4 w-4 fill-black" />
-                  Watch Now
-                </button>
               </div>
+            ))}
+
+            <div className="absolute bottom-6 right-6 z-20 flex gap-2">
+              {featuredMovies.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setFeaturedIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === featuredIndex ? 'w-6 bg-white' : 'w-2 bg-white/30 hover:bg-white/50'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
             </div>
           </section>
         )}
@@ -428,7 +499,19 @@ const MovieApp: React.FC<MovieAppProps> = () => {
         {!isSearching && providerRails.map((row) => (
           <section key={row.key} className="space-y-3">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-xl md:text-2xl font-bold text-white">{row.name}</h3>
+              <div className="flex items-center gap-3">
+                {row.iconUrl && (
+                  <img
+                    src={row.iconUrl}
+                    alt={row.name}
+                    className="h-6 w-6 md:h-8 md:w-8 rounded-md object-contain bg-white/10"
+                    onError={(e) => (e.currentTarget.style.display = 'none')}
+                  />
+                )}
+                <h3 className="text-xl md:text-2xl font-bold text-white">
+                  {getBrowseLabel()} on {row.name}
+                </h3>
+              </div>
               <div className={`h-px flex-1 bg-gradient-to-r ${row.accentClass} to-transparent`} />
             </div>
 

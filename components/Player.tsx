@@ -32,8 +32,8 @@ const SOURCES: SourceDefinition[] = [
   {
     id: 'vidlink',
     label: 'VidLink',
-    movieUrl: (tmdbId) => `https://vidlink.pro/movie/${tmdbId}`,
-    tvUrl: (tmdbId, season, episode) => `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}`,
+    movieUrl: (tmdbId) => `https://vidlink.pro/movie/${tmdbId}?primaryColor=E50914&autoplay=true&title=false&icons=vid&player=jw`,
+    tvUrl: (tmdbId, season, episode) => `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}?primaryColor=E50914&autoplay=true&title=false&icons=vid&player=jw`,
   },
   {
     id: 'vidsrcTo',

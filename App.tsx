@@ -47,16 +47,31 @@ const App: React.FC = () => {
     savePrefs(prefs);
   }, [prefs]);
 
+  const { defaultTitle, defaultFavicon } = useMemo(() => {
+    switch (appMode) {
+      case 'streams':
+        return { defaultTitle: 'WinstonStreams', defaultFavicon: 'https://img.icons8.com/?size=100&id=Tcl2xO1rR2F0&format=png&color=000000' };
+      case 'searches':
+        return { defaultTitle: 'WinstonSearches', defaultFavicon: 'https://img.icons8.com/?size=100&id=113822&format=png&color=000000' };
+      case 'games':
+        return { defaultTitle: 'WinstonGames', defaultFavicon: 'https://img.icons8.com/?size=100&id=tN2I03pBf0Q8&format=png&color=000000' };
+      case 'apps':
+        return { defaultTitle: 'WinstonApps', defaultFavicon: 'https://img.icons8.com/?size=100&id=sz8cPVwzLrFW&format=png&color=000000' };
+      default:
+        return { defaultTitle: baseTitle, defaultFavicon: baseFaviconHref };
+    }
+  }, [appMode, baseTitle, baseFaviconHref]);
+
   useEffect(() => {
     if (!prefs.cloakMode) {
-      setDocumentTitle(baseTitle);
-      if (baseFaviconHref) setFavicon(baseFaviconHref);
+      setDocumentTitle(defaultTitle);
+      if (defaultFavicon) setFavicon(defaultFavicon);
       return;
     }
 
-    setDocumentTitle(prefs.cloakTitle || baseTitle);
+    setDocumentTitle(prefs.cloakTitle || defaultTitle);
     if (prefs.cloakFaviconUrl) setFavicon(prefs.cloakFaviconUrl);
-  }, [prefs.cloakMode, prefs.cloakTitle, prefs.cloakFaviconUrl, baseTitle, baseFaviconHref]);
+  }, [prefs.cloakMode, prefs.cloakTitle, prefs.cloakFaviconUrl, defaultTitle, defaultFavicon]);
 
   const handleLaunch = (target: LaunchMode) => {
     setAppMode(target);
@@ -73,7 +88,7 @@ const App: React.FC = () => {
     if (!url) return;
 
     if (prefs.cloakMode && prefs.cloakAboutBlank) {
-      openAboutBlankCloaked(url, prefs.cloakTitle || baseTitle, prefs.cloakFaviconUrl || baseFaviconHref);
+      openAboutBlankCloaked(url, prefs.cloakTitle || defaultTitle, prefs.cloakFaviconUrl || defaultFavicon);
       return;
     }
 

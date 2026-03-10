@@ -14,6 +14,13 @@ interface App {
 
 type SortMode = 'alphabetical' | 'reverse' | 'shortest';
 
+const FEATURED_APP: App = {
+  appName: 'Discord Web',
+  icon: 'https://www.google.com/s2/favicons?sz=128&domain=discord.com',
+  desc: 'Chat and voice seamlessly in browser',
+  url: 'https://discord.com/app',
+};
+
 const AppsApp: React.FC<AppsAppProps> = ({ onOpenUrl }) => {
   const [apps, setApps] = useState<App[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,6 +66,11 @@ const AppsApp: React.FC<AppsAppProps> = ({ onOpenUrl }) => {
 
     return [...base].sort((a, b) => a.appName.localeCompare(b.appName));
   }, [apps, searchQuery, sortBy]);
+
+  const gridApps = useMemo(
+    () => filteredApps.filter((app) => app.url !== FEATURED_APP.url && app.appName !== FEATURED_APP.appName),
+    [filteredApps]
+  );
 
   const handleImageError = (appName: string) => {
     setFallbackIcons((prev) => new Set(prev).add(appName));
@@ -127,9 +139,47 @@ const AppsApp: React.FC<AppsAppProps> = ({ onOpenUrl }) => {
           </div>
         </section>
 
+        <section className="rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-900/35 via-zinc-900 to-zinc-950 p-4 md:p-5">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-emerald-300 mb-3">
+            <LayoutGrid className="h-3.5 w-3.5 text-emerald-300" />
+            Featured
+          </div>
+
+          <button
+            onClick={() => handleAppClick(FEATURED_APP.url)}
+            className="w-full text-left rounded-xl border border-emerald-500/35 bg-zinc-900/75 hover:bg-zinc-900 transition p-4 md:p-5 group"
+          >
+            <div className="flex items-center gap-4 md:gap-5">
+              <div className="h-16 w-16 md:h-20 md:w-20 rounded-xl bg-zinc-800 overflow-hidden shrink-0 border border-zinc-700">
+                {fallbackIcons.has(FEATURED_APP.appName) ? (
+                  <div className="h-full w-full flex items-center justify-center">
+                    <LayoutGrid className="w-8 h-8 text-emerald-400" />
+                  </div>
+                ) : (
+                  <img
+                    src={FEATURED_APP.icon}
+                    alt={FEATURED_APP.appName}
+                    className="h-full w-full object-cover"
+                    onError={() => handleImageError(FEATURED_APP.appName)}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-white truncate">{FEATURED_APP.appName}</p>
+                <p className="text-sm md:text-base text-zinc-300 mt-1">{FEATURED_APP.desc}</p>
+              </div>
+              <div className="ml-auto rounded-full bg-emerald-500/20 border border-emerald-400/30 p-2.5 text-emerald-200 shrink-0 group-hover:bg-emerald-500/30 transition">
+                <ExternalLink className="h-4 w-4" />
+              </div>
+            </div>
+          </button>
+        </section>
+
         <section className="rounded-2xl border border-zinc-800 bg-zinc-950/45 p-4 md:p-5">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-            {filteredApps.map((app) => (
+            {gridApps.map((app) => (
               <button
                 key={`${app.appName}-${app.url}`}
                 onClick={() => handleAppClick(app.url)}
@@ -163,7 +213,7 @@ const AppsApp: React.FC<AppsAppProps> = ({ onOpenUrl }) => {
             ))}
           </div>
 
-          {filteredApps.length === 0 && (
+          {gridApps.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 text-zinc-500 text-center">
               <LayoutGrid className="h-16 w-16 mb-4 opacity-50" />
               <p className="text-lg text-zinc-300">No apps found</p>

@@ -103,39 +103,94 @@ export const getTrendingMedia = async (
 export const discoverByProvider = async (
   type: 'all' | 'movie' | 'tv',
   providerId: number,
+  sortBy: string,
+  genreFilter: GenreFilter | null,
   apiKey: string,
   page = 1
 ): Promise<Movie[]> => {
-  const fetchType = async (mediaType: 'movie' | 'tv') => {
-    const data = await fetchFromTMDB<TMDBResponse>(`/discover/${mediaType}`, apiKey, {
+  const fetchType = async (mediaType: 'movie' | 'tv', specificGenreId?: number) => {
+    let apiSortBy = sortBy;
+    if (mediaType === 'tv' && sortBy.includes('primary_release_date')) {
+      apiSortBy = sortBy.replace('primary_release_date', 'first_air_date');
+    }
+
+    const params: Record<string, string> = {
       language: 'en-US',
       page: page.toString(),
       include_adult: 'false',
-      sort_by: 'popularity.desc',
+      sort_by: apiSortBy,
       watch_region: 'US',
       with_watch_providers: providerId.toString(),
       with_watch_monetization_types: 'flatrate',
-      'vote_count.gte': '50',
-    });
+    };
+
+    if (!sortBy.includes('date')) {
+      params['vote_count.gte'] = '50';
+    }
+
+    if (specificGenreId && specificGenreId > 0) {
+      params.with_genres = specificGenreId.toString();
+    }
+    
+    if (sortBy.includes('date')) {
+        const today = new Date().toISOString().split('T')[0];
+        if (mediaType === 'movie') {
+            params['primary_release_date.lte'] = today;
+        } else {
+            params['first_air_date.lte'] = today;
+        }
+    }
+
+    const data = await fetchFromTMDB<TMDBResponse>(`/discover/${mediaType}`, apiKey, params);
 
     if (!data?.results) return [];
     return data.results.map((m) => ({ ...m, media_type: mediaType }));
   };
 
-  if (type === 'movie' || type === 'tv') {
-    return fetchType(type);
+  if (type === 'all') {
+    let movieGenreId: number | undefined;
+    let tvGenreId: number | undefined;
+    if (genreFilter) {
+      if (typeof genreFilter === 'number') {
+        movieGenreId = genreFilter;
+        tvGenreId = genreFilter;
+      } else {
+        movieGenreId = genreFilter.movie;
+        tvGenreId = genreFilter.tv;
+      }
+    }
+    const shouldFetchMovies = genreFilter === null || movieGenreId !== undefined;
+    const shouldFetchTV = genreFilter === null || tvGenreId !== undefined;
+
+    const [movies, tv] = await Promise.all([
+      shouldFetchMovies ? fetchType('movie', movieGenreId) : Promise.resolve([]),
+      shouldFetchTV ? fetchType('tv', tvGenreId) : Promise.resolve([])
+    ]);
+    const merged = [...movies, ...tv];
+    
+    // Deduplicate
+    const seen = new Set<string>();
+    const deduplicated = merged.filter((item) => {
+      const key = `${item.media_type}-${item.id}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    return deduplicated.sort((a, b) => {
+      if (sortBy.includes('popularity')) return (b.popularity || 0) - (a.popularity || 0); 
+      if (sortBy.includes('vote_average')) return (b.vote_average || 0) - (a.vote_average || 0);
+      if (sortBy.includes('date')) {
+        const dateA = a.release_date || a.first_air_date || '';
+        const dateB = b.release_date || b.first_air_date || '';
+        return dateB.localeCompare(dateA);
+      }
+      return 0;
+    });
+  } else {
+    const gid = typeof genreFilter === 'number' ? genreFilter : undefined;
+    return await fetchType(type, gid);
   }
-
-  const [movies, tv] = await Promise.all([fetchType('movie'), fetchType('tv')]);
-  const merged = [...movies, ...tv];
-  const seen = new Set<string>();
-
-  return merged.filter((item) => {
-    const key = `${item.media_type}-${item.id}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
 };
 
 export const discoverMedia = async (

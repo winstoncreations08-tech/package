@@ -167,8 +167,8 @@ const GamesApp: React.FC<GamesAppProps> = ({ onOpenUrl }) => {
                 )}
               </div>
               <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold tracking-tight text-white truncate">cheesestorecedarhurst.com</p>
-                <p className="text-sm md:text-base text-zinc-300 mt-1">Pinned as your main featured destination.</p>
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-white truncate">{FEATURED_GAME.appName}</p>
+                <p className="text-sm md:text-base text-zinc-300 mt-1">{FEATURED_GAME.desc}</p>
               </div>
               <div className="ml-auto rounded-full bg-purple-500/20 border border-purple-400/30 p-2.5 text-purple-200 shrink-0 group-hover:bg-purple-500/30 transition">
                 <ExternalLink className="h-4 w-4" />

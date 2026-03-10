@@ -8,13 +8,14 @@ export function setFavicon(faviconUrl: string) {
   const url = faviconUrl?.trim();
   if (!url) return;
 
-  let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
-  if (!link) {
-    link = document.createElement('link');
-    link.rel = 'icon';
-    document.head.appendChild(link);
-  }
-  link.href = url;
+  const links = document.querySelectorAll<HTMLLinkElement>('link[rel*="icon"]');
+  links.forEach(link => link.remove());
+
+  const newLink = document.createElement('link');
+  newLink.rel = 'icon';
+  newLink.type = 'image/png';
+  newLink.href = url.includes('?') ? `${url}&_cb=${Date.now()}` : `${url}?_cb=${Date.now()}`;
+  document.head.appendChild(newLink);
 }
 
 export function openAboutBlankCloaked(targetUrl: string, title: string, faviconUrl: string) {
