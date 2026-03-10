@@ -1,0 +1,5 @@
+{
+  "name": "WinstonStreams",
+  "description": "A premium dark-themed movie streaming application featuring infinite scroll, TMDB integration, and proxy-enabled playback.",
+  "requestFramePermissions": []
+}

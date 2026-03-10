@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom Scrollbar Utilities */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Custom Scrollbar Styling for Admin Console & Modals */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.3);
+  border-radius: 10px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.5);
+}
+
+/* Scanline Animation for Admin Console */
+@keyframes scan {
+  0% { transform: translateY(0); opacity: 0.5; }
+  50% { opacity: 0.2; }
+  100% { transform: translateY(100%); opacity: 0.5; }
+}
