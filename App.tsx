@@ -31,11 +31,6 @@ const App: React.FC = () => {
   const [appMode, setAppMode] = useState<AppMode>(() => modeFromPath(window.location.pathname));
   const [hoveredCard, setHoveredCard] = useState<LaunchMode | null>(null);
   const [prefs, setPrefs] = useState<WinstonPrefs>(() => loadPrefs());
-  const [baseTitle] = useState(() => (typeof document !== 'undefined' ? document.title : 'Winston'));
-  const [baseFaviconHref] = useState(() => {
-    if (typeof document === 'undefined') return '';
-    return document.querySelector<HTMLLinkElement>('link[rel="icon"]')?.href || '';
-  });
 
   useEffect(() => {
     const handlePopState = () => setAppMode(modeFromPath(window.location.pathname));
@@ -47,30 +42,32 @@ const App: React.FC = () => {
     savePrefs(prefs);
   }, [prefs]);
 
+  const makeSvgFavicon = (letter: string, bg: string) =>
+    `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}'/%3E%3Ctext x='50' y='68' font-size='56' font-weight='900' font-family='system-ui' fill='white' text-anchor='middle'%3E${letter}%3C/text%3E%3C/svg%3E`;
+
   const { defaultTitle, defaultFavicon } = useMemo(() => {
     switch (appMode) {
       case 'streams':
-        return { defaultTitle: 'WinstonStreams', defaultFavicon: 'https://img.icons8.com/?size=100&id=Tcl2xO1rR2F0&format=png&color=000000' };
+        return { defaultTitle: 'WinstonStreams', defaultFavicon: makeSvgFavicon('S', '#dc2626') };
       case 'searches':
-        return { defaultTitle: 'WinstonSearches', defaultFavicon: 'https://img.icons8.com/?size=100&id=113822&format=png&color=000000' };
+        return { defaultTitle: 'WinstonSearches', defaultFavicon: makeSvgFavicon('S', '#2563eb') };
       case 'games':
-        return { defaultTitle: 'WinstonGames', defaultFavicon: 'https://img.icons8.com/?size=100&id=tN2I03pBf0Q8&format=png&color=000000' };
+        return { defaultTitle: 'WinstonGames', defaultFavicon: makeSvgFavicon('G', '#9333ea') };
       case 'apps':
-        return { defaultTitle: 'WinstonApps', defaultFavicon: 'https://img.icons8.com/?size=100&id=sz8cPVwzLrFW&format=png&color=000000' };
+        return { defaultTitle: 'WinstonApps', defaultFavicon: makeSvgFavicon('A', '#16a34a') };
       default:
-        return { defaultTitle: baseTitle, defaultFavicon: baseFaviconHref };
+        return { defaultTitle: 'Winston', defaultFavicon: makeSvgFavicon('W', '#18181b') };
     }
-  }, [appMode, baseTitle, baseFaviconHref]);
+  }, [appMode]);
 
   useEffect(() => {
-    if (!prefs.cloakMode) {
+    if (prefs.cloakMode) {
+      setDocumentTitle(prefs.cloakTitle || defaultTitle);
+      setFavicon(prefs.cloakFaviconUrl || defaultFavicon);
+    } else {
       setDocumentTitle(defaultTitle);
-      if (defaultFavicon) setFavicon(defaultFavicon);
-      return;
+      setFavicon(defaultFavicon);
     }
-
-    setDocumentTitle(prefs.cloakTitle || defaultTitle);
-    if (prefs.cloakFaviconUrl) setFavicon(prefs.cloakFaviconUrl);
   }, [prefs.cloakMode, prefs.cloakTitle, prefs.cloakFaviconUrl, defaultTitle, defaultFavicon]);
 
   const handleLaunch = (target: LaunchMode) => {
@@ -148,7 +145,7 @@ const App: React.FC = () => {
   return (
     <div className="h-[100dvh] bg-zinc-950 text-white relative font-sans selection:bg-white/20 overflow-hidden flex flex-col">
       <div className="relative z-10 w-full flex-1 flex flex-col overflow-hidden">
-        {appMode !== 'launcher' && <TopBar onBackToLauncher={handleBackToLauncher} prefs={prefs} onChangePrefs={setPrefs} />}
+        <TopBar onBackToLauncher={handleBackToLauncher} prefs={prefs} onChangePrefs={setPrefs} showHome={appMode !== 'launcher'} />
 
         {appMode === 'streams' && <MovieApp />}
         {appMode === 'searches' && <SearchApp onOpenUrl={openUrl} />}

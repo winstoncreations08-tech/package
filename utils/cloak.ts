@@ -8,14 +8,22 @@ export function setFavicon(faviconUrl: string) {
   const url = faviconUrl?.trim();
   if (!url) return;
 
-  const links = document.querySelectorAll<HTMLLinkElement>('link[rel*="icon"]');
-  links.forEach(link => link.remove());
+  // Remove ALL existing favicon links
+  document.querySelectorAll<HTMLLinkElement>('link[rel*="icon"]').forEach(l => l.remove());
 
-  const newLink = document.createElement('link');
-  newLink.rel = 'icon';
-  newLink.type = 'image/png';
-  newLink.href = url.includes('?') ? `${url}&_cb=${Date.now()}` : `${url}?_cb=${Date.now()}`;
-  document.head.appendChild(newLink);
+  const isSvgData = url.startsWith('data:image/svg');
+  const type = isSvgData ? 'image/svg+xml' : 'image/png';
+  // For non-data URLs, bust the cache
+  const href = url.startsWith('data:') ? url : (url.includes('?') ? `${url}&_cb=${Date.now()}` : `${url}?_cb=${Date.now()}`);
+
+  // Set both 'icon' and 'shortcut icon' for maximum compatibility
+  for (const rel of ['icon', 'shortcut icon']) {
+    const link = document.createElement('link');
+    link.rel = rel;
+    link.type = type;
+    link.href = href;
+    document.head.appendChild(link);
+  }
 }
 
 export function openAboutBlankCloaked(targetUrl: string, title: string, faviconUrl: string) {
