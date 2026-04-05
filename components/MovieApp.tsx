@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import MovieCard from './MovieCard';
+import StreamCarousel from './StreamCarousel';
 import Player from './Player';
 import SettingsModal from './SettingsModal';
 import { Movie, Settings, MediaType, SortOption, Genre, GenreFilter } from '../types';
@@ -233,14 +234,24 @@ const MovieApp: React.FC<MovieAppProps> = () => {
           }
         }
 
-        const [trending, ...providerResults] = await Promise.all([
+        // Fetch page 1 and page 2 for each provider to get ~40 items per row
+        const [trending, ...providerResultsFlat] = await Promise.all([
           getTrendingMedia(mediaType, settings.tmdbApiKey, 'week'),
-          ...STREAMING_PROVIDER_CONFIG.map((provider) => 
-            discoverByProvider(mediaType, provider.providerId, sortBy, genreFilter, settings.tmdbApiKey, 1)
-          ),
+          ...STREAMING_PROVIDER_CONFIG.flatMap((provider) => [
+            discoverByProvider(mediaType, provider.providerId, sortBy, genreFilter, settings.tmdbApiKey, 1),
+            discoverByProvider(mediaType, provider.providerId, sortBy, genreFilter, settings.tmdbApiKey, 2),
+          ]),
         ]);
 
         if (cancelled) return;
+
+        // Re-group the flat results: every 2 results belong to one provider
+        const providerResults: Movie[][] = [];
+        for (let i = 0; i < STREAMING_PROVIDER_CONFIG.length; i++) {
+          const page1 = providerResultsFlat[i * 2] || [];
+          const page2 = providerResultsFlat[i * 2 + 1] || [];
+          providerResults.push([...page1, ...page2]);
+        }
 
         const heroes: Array<{ movie: Movie; provider: ProviderConfig | null }> = [];
         const topTrending = trending.find((m) => !!m.backdrop_path);
@@ -262,7 +273,7 @@ const MovieApp: React.FC<MovieAppProps> = () => {
 
           return {
             ...provider,
-            items: deduped.slice(0, 18),
+            items: deduped,
           };
         }).filter((row) => row.items.length > 0);
 
@@ -515,13 +526,7 @@ const MovieApp: React.FC<MovieAppProps> = () => {
               <div className={`h-px flex-1 bg-gradient-to-r ${row.accentClass} to-transparent`} />
             </div>
 
-            <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 no-scrollbar">
-              {row.items.map((movie) => (
-                <div key={`${row.key}-${movie.media_type || 'movie'}-${movie.id}`} className="w-[145px] sm:w-[160px] md:w-[180px] shrink-0">
-                  <MovieCard movie={movie} onClick={handleMovieClick} />
-                </div>
-              ))}
-            </div>
+            <StreamCarousel items={row.items} onMovieClick={handleMovieClick} />
           </section>
         ))}
 
