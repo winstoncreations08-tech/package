@@ -147,6 +147,24 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
     return `${base}${sep}autoplay=true&winstonReload=${reloadToken}`;
   }, [movie, activeSource, season, episode, reloadToken]);
 
+  // Wrap embed in srcdoc to escape UV proxy service worker scope.
+  // This creates a clean browsing context so video embeds load directly
+  // without being routed through the proxy (which causes SSL failures).
+  const srcdocContent = useMemo(() => {
+    if (!embedSrc || embedSrc === 'about:blank') return undefined;
+    const escaped = embedSrc.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    return `<!DOCTYPE html>
+<html style="height:100%;margin:0;padding:0;overflow:hidden">
+<body style="height:100%;margin:0;padding:0;overflow:hidden">
+<iframe
+  src="${escaped}"
+  style="width:100%;height:100%;border:none"
+  allowfullscreen
+  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+></iframe>
+</body></html>`;
+  }, [embedSrc]);
+
   const openInNewTab = () => {
     window.open(embedSrc, '_blank', 'noopener,noreferrer');
   };
@@ -407,7 +425,7 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
         <iframe
           ref={iframeRef}
           key={`${movie.id}-${season}-${episode}-${sourceIndex}-${reloadToken}`}
-          src={embedSrc}
+          srcDoc={srcdocContent}
           className="absolute inset-0 w-full h-full border-0 z-10"
           allowFullScreen
           allow="autoplay; fullscreen *; picture-in-picture; encrypted-media"
