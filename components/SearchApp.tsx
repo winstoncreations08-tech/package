@@ -39,7 +39,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onOpenUrl }) => {
       return input.startsWith('http') ? input : `https://${input}`;
     }
 
-    return `https://www.google.com/search?igu=1&q=${encodeURIComponent(input)}`;
+    return `https://www.bing.com/search?q=${encodeURIComponent(input)}`;
   };
 
   const runSearch = (value?: string) => {
