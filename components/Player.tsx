@@ -170,7 +170,6 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
 <iframe
   src="${escaped}"
   style="width:100%;height:100%;border:none"
-  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-pointer-lock"
   allowfullscreen
   allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
 ></iframe>
@@ -191,7 +190,6 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
 <iframe
   src="${escaped}"
   style="width:100%;height:100%;border:none"
-  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-pointer-lock"
   allowfullscreen
   allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
 ></iframe>
