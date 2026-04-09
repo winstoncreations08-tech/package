@@ -221,16 +221,6 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
   useEffect(() => {
     setIsIframeLoading(true);
     setShowRecovery(false);
-
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data === 'iframeLoaded') {
-        setIsIframeLoading(false);
-        setShowRecovery(false);
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
   }, [embedSrc]);
 
   useEffect(() => {
@@ -417,29 +407,16 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
         <iframe
           ref={iframeRef}
           key={`${movie.id}-${season}-${episode}-${sourceIndex}-${reloadToken}`}
-          srcDoc={`
-            <!DOCTYPE html>
-            <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <style>
-                  body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; }
-                  iframe { width: 100%; height: 100%; border: none; }
-                </style>
-              </head>
-              <body>
-                <iframe src="${embedSrc}" allowfullscreen="true" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="origin-when-cross-origin"></iframe>
-                <script>
-                  const iframe = document.querySelector('iframe');
-                  iframe.onload = () => { window.parent.postMessage('iframeLoaded', '*'); };
-                </script>
-              </body>
-            </html>
-          `}
+          src={embedSrc}
           className="absolute inset-0 w-full h-full border-0 z-10"
           allowFullScreen
           allow="autoplay; fullscreen *; picture-in-picture; encrypted-media"
+          referrerPolicy="origin-when-cross-origin"
           title={`Watch ${title}`}
+          onLoad={() => {
+            setIsIframeLoading(false);
+            setShowRecovery(false);
+          }}
         />
 
         {showRecovery && (
