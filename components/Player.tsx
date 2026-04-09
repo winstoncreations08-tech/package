@@ -143,8 +143,19 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
       ? activeSource.tvUrl(tmdbId, season, episode)
       : activeSource.movieUrl(tmdbId);
 
-    const sep = base.includes('?') ? '&' : '?';
-    return `${base}${sep}autoplay=true&winstonReload=${reloadToken}`;
+    try {
+      const url = new URL(base);
+      // Only add autoplay if the source URL didn't already specify it
+      if (!url.searchParams.has('autoplay')) url.searchParams.set('autoplay', 'true');
+      // Cache-buster / reload token so "Reload" forces a fresh URL
+      url.searchParams.set('winstonReload', String(reloadToken));
+      return url.toString();
+    } catch {
+      const sep = base.includes('?') ? '&' : '?';
+      const hasAutoplay = /(?:\?|&)autoplay=/.test(base);
+      const autoplayPart = hasAutoplay ? '' : 'autoplay=true&';
+      return `${base}${sep}${autoplayPart}winstonReload=${reloadToken}`;
+    }
   }, [movie, activeSource, season, episode, reloadToken]);
 
   // Wrap embed in srcdoc to escape UV proxy service worker scope.
@@ -159,6 +170,7 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
 <iframe
   src="${escaped}"
   style="width:100%;height:100%;border:none"
+  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-pointer-lock"
   allowfullscreen
   allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
 ></iframe>
@@ -166,7 +178,29 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
   }, [embedSrc]);
 
   const openInNewTab = () => {
-    window.open(embedSrc, '_blank', 'noopener,noreferrer');
+    if (!embedSrc || embedSrc === 'about:blank') return;
+    const w = window.open('about:blank', '_blank', 'noopener,noreferrer');
+    if (!w) return;
+    try {
+      const escaped = embedSrc.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      w.document.open();
+      w.document.write(`<!DOCTYPE html>
+<html style="height:100%;margin:0;padding:0;overflow:hidden">
+<head><meta charset="utf-8" /><meta name="referrer" content="origin-when-cross-origin" /></head>
+<body style="height:100%;margin:0;padding:0;overflow:hidden">
+<iframe
+  src="${escaped}"
+  style="width:100%;height:100%;border:none"
+  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-pointer-lock"
+  allowfullscreen
+  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+></iframe>
+</body></html>`);
+      w.document.close();
+    } catch {
+      // Fall back to direct navigation if writing to about:blank fails
+      w.location.href = embedSrc;
+    }
   };
 
   useEffect(() => {
