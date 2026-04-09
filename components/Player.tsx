@@ -11,7 +11,6 @@ import {
   Maximize,
   Minimize,
   RotateCcw,
-  ExternalLink,
 } from 'lucide-react';
 import { getTVDetails } from '../services/tmdb';
 
@@ -158,48 +157,7 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
     }
   }, [movie, activeSource, season, episode, reloadToken]);
 
-  // Wrap embed in srcdoc to escape UV proxy service worker scope.
-  // This creates a clean browsing context so video embeds load directly
-  // without being routed through the proxy (which causes SSL failures).
-  const srcdocContent = useMemo(() => {
-    if (!embedSrc || embedSrc === 'about:blank') return undefined;
-    const escaped = embedSrc.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-    return `<!DOCTYPE html>
-<html style="height:100%;margin:0;padding:0;overflow:hidden">
-<body style="height:100%;margin:0;padding:0;overflow:hidden">
-<iframe
-  src="${escaped}"
-  style="width:100%;height:100%;border:none"
-  allowfullscreen
-  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-></iframe>
-</body></html>`;
-  }, [embedSrc]);
 
-  const openInNewTab = () => {
-    if (!embedSrc || embedSrc === 'about:blank') return;
-    const w = window.open('about:blank', '_blank', 'noopener,noreferrer');
-    if (!w) return;
-    try {
-      const escaped = embedSrc.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-      w.document.open();
-      w.document.write(`<!DOCTYPE html>
-<html style="height:100%;margin:0;padding:0;overflow:hidden">
-<head><meta charset="utf-8" /><meta name="referrer" content="origin-when-cross-origin" /></head>
-<body style="height:100%;margin:0;padding:0;overflow:hidden">
-<iframe
-  src="${escaped}"
-  style="width:100%;height:100%;border:none"
-  allowfullscreen
-  allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-></iframe>
-</body></html>`);
-      w.document.close();
-    } catch {
-      // Fall back to direct navigation if writing to about:blank fails
-      w.location.href = embedSrc;
-    }
-  };
 
   useEffect(() => {
     if (!movie) return;
@@ -323,11 +281,11 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
   return createPortal(
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-black flex flex-col w-screen h-screen overflow-hidden animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] bg-black flex flex-col overflow-hidden animate-in fade-in duration-300"
     >
       <div
-        className={`flex-none bg-zinc-950 border-b border-zinc-800 p-4 relative z-20 shadow-lg transition-opacity duration-300 ${
-          isFullscreen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        className={`flex-none bg-zinc-950 border-b border-zinc-800 p-4 relative z-20 shadow-lg transition-all duration-300 ${
+          isFullscreen ? 'hidden' : 'block'
         }`}
       >
         <div className="mx-auto max-w-[1920px] flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
@@ -427,14 +385,6 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
               Reload
             </button>
 
-            <button
-              onClick={openInNewTab}
-              className="rounded-md bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs font-semibold px-3 py-2 hover:bg-zinc-800 transition inline-flex items-center gap-1.5"
-              title="Open current source in a new tab"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              Open Tab
-            </button>
           </div>
         </div>
       </div>
@@ -457,7 +407,7 @@ const Player: React.FC<PlayerProps> = ({ movie, onClose, apiKey }) => {
         <iframe
           ref={iframeRef}
           key={`${movie.id}-${season}-${episode}-${sourceIndex}-${reloadToken}`}
-          srcDoc={srcdocContent}
+          src={embedSrc}
           className="absolute inset-0 w-full h-full border-0 z-10"
           allowFullScreen
           allow="autoplay; fullscreen *; picture-in-picture; encrypted-media"
