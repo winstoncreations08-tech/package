@@ -26,22 +26,6 @@ const SearchApp: React.FC<SearchAppProps> = ({ onOpenUrl }) => {
   const loadCountRef = useRef(0);
   const lastSearchUrlRef = useRef('');
 
-  const wrapGoogleWithTranslate = (url: string) => {
-    try {
-      const u = new URL(url);
-      const isGoogleSearch =
-        u.hostname === 'www.google.com' &&
-        u.pathname === '/search' &&
-        u.searchParams.has('q');
-      if (!isGoogleSearch) return url;
-      return `https://translate.google.com/translate?sl=auto&tl=en&u=${encodeURIComponent(
-        url,
-      )}`;
-    } catch {
-      return url;
-    }
-  };
-
   const isUrl = (str: string) => {
     const pattern = /^(https?:\/\/)?([\\da-z\\.-]+)\.([a-z\\.]{2,6})([\/\\w \\.-]*)*\/?$/;
     return pattern.test(str);
@@ -55,8 +39,7 @@ const SearchApp: React.FC<SearchAppProps> = ({ onOpenUrl }) => {
       return input.startsWith('http') ? input : `https://${input}`;
     }
 
-    const google = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-    return wrapGoogleWithTranslate(google);
+    return `https://www.bing.com/search?q=${encodeURIComponent(input)}`;
   };
 
   const runSearch = (value?: string) => {
